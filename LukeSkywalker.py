@@ -19,7 +19,10 @@ def run(username, password, fix_version, sprint):
     jql = create_appropriate_jql(fix_version, sprint)
     stories = StoryHandler(jira_connection, jql).find_stories()
     model_list = IssueModel(jira_connection, stories).filter_objects_to_copy()
-    create_new_tecs(jira_connection, model_list)
+    if CONSTANTS.TEST == True:
+        create_new_tecs(jira_connection, model_list[0])
+    else: 
+        create_new_tecs(jira_connection, model_list)
 
 
 def create_new_tecs(jira_connection, model_list):
