@@ -2,9 +2,10 @@ import CONSTANTS
 
 
 class IssueModel:
-    def __init__(self, connection, stories):
+    def __init__(self, connection, stories, fix_version):
         self.connection = connection
         self.stories = stories
+        self.fix_version = fix_version
 
     def filter_objects_to_copy(self):
         model_list = []
@@ -12,7 +13,7 @@ class IssueModel:
             story_fields = self.connection.issue(story)
             this_story = story_fields.fields
 
-            fix_version = str(this_story.fixVersions[0]).split('_')[0]
+            fix_version = self.fix_version.split('_')[0]
             summary = "{} {}".format(str(story), this_story.summary)
             acceptation_criterias = this_story.customfield_10813
             hc_ap = this_story.customfield_10815.name
@@ -22,10 +23,10 @@ class IssueModel:
                     'key': CONSTANTS.PROJECT_KEY
                 },
                 'fixVersions': [{
-                    'name': fix_version
+                    'name': str(fix_version)
                 }],
-                'summary': summary,
-                'description': acceptation_criterias,
+                'summary': str(summary),
+                'description': str(acceptation_criterias),
                 'assignee': {
                     'name': str(hc_ap)
                 },
